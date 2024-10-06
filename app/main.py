@@ -11,7 +11,7 @@ class Book:
             display: Display = ConsoleDisplay(),
             printer: Printer = ConsolePrinter(),
             serializer: Serializer = JsonSerializer()
-    ):
+    ) -> None:
         self.title = title
         self.content = content
         self.display_service = display
@@ -56,7 +56,9 @@ def main(
                 elif method_type == "xml":
                     book.serialize_service = XmlSerializer()
                 else:
-                    raise ValueError(f"Unknown serialization type: {method_type}")
+                    raise ValueError(
+                        f"Unknown serialization type: {method_type}"
+                    )
                 return book.serialize()
             else:
                 raise ValueError(f"Unknown command: {cmd}")
