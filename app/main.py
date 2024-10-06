@@ -57,12 +57,11 @@ def main(
                     book.serialize_service = XmlSerializer()
                 else:
                     raise ValueError(f"Unknown serialization type: {method_type}")
-                print(book.serialize())
+                return book.serialize()
             else:
                 raise ValueError(f"Unknown command: {cmd}")
         except ValueError as e:
             print(f"Error: {e}")
-    return None
 
 
 if __name__ == "__main__":
