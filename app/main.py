@@ -8,24 +8,18 @@ class Book:
             self,
             title: str,
             content: str,
-            display: Display = ConsoleDisplay(),
-            printer: Printer = ConsolePrinter(),
-            serializer: Serializer = JsonSerializer()
     ) -> None:
         self.title = title
         self.content = content
-        self.display_service = display
-        self.printer_service = printer
-        self.serialize_service = serializer
 
-    def display(self) -> None:
-        self.display_service.display(self.content)
+    def display(self, display_service: Display) -> None:
+        display_service.display(self.content)
 
-    def print_book(self) -> None:
-        self.printer_service.print(self.title, self.content)
+    def print_book(self, printer_service: Printer) -> None:
+        printer_service.print(self.title, self.content)
 
-    def serialize(self) -> str:
-        return self.serialize_service.serialize(self.title, self.content)
+    def serialize(self, serializer_service: Serializer) -> str:
+        return serializer_service.serialize(self.title, self.content)
 
 
 def main(
@@ -36,30 +30,27 @@ def main(
         try:
             if cmd == "display":
                 if method_type == "console":
-                    book.display_service = ConsoleDisplay()
+                    book.display(ConsoleDisplay())
                 elif method_type == "reverse":
-                    book.display_service = ReverseDisplay()
+                    book.display(ReverseDisplay())
                 else:
                     raise ValueError(f"Unknown display type: {method_type}")
-                book.display()
             elif cmd == "print":
                 if method_type == "console":
-                    book.printer_service = ConsolePrinter()
+                    book.print_book(ConsolePrinter())
                 elif method_type == "reverse":
-                    book.printer_service = ReversePrinter()
+                    book.print_book(ReversePrinter())
                 else:
                     raise ValueError(f"Unknown printer type: {method_type}")
-                book.print_book()
             elif cmd == "serialize":
                 if method_type == "json":
-                    book.serialize_service = JsonSerializer()
+                    return book.serialize(JsonSerializer())
                 elif method_type == "xml":
-                    book.serialize_service = XmlSerializer()
+                    return book.serialize(XmlSerializer())
                 else:
                     raise ValueError(
                         f"Unknown serialization type: {method_type}"
                     )
-                return book.serialize()
             else:
                 raise ValueError(f"Unknown command: {cmd}")
         except ValueError as e:
